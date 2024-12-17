@@ -6,8 +6,10 @@
 /// # Examples
 ///
 /// ```rust
+/// use cfg_exif::feature;
+///
 /// assert_eq!(
-///     cfg_exif::feature!(if ("foo") {
+///     feature!(if ("foo") {
 ///         0
 ///     } else if (!"bar") {
 ///         42
@@ -47,8 +49,8 @@ macro_rules! feature {
 /// # Examples
 ///
 /// ```rust
-/// # use cfg_exif::cfg;
-/// # fn main() {
+/// use cfg_exif::cfg;
+///
 /// assert_eq!(
 ///     cfg!(if (feature == "foo") {
 ///         0
@@ -59,7 +61,6 @@ macro_rules! feature {
 ///     }),
 ///     42
 /// );
-/// # }
 /// ```
 #[macro_export]
 macro_rules! cfg {
