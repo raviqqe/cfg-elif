@@ -7,7 +7,7 @@ pub use crate::{expr_cfg as cfg, expr_feature as feature};
 /// # Examples
 ///
 /// ```rust
-/// use cfg_exif::expr::feature;
+/// use cfg_elif::expr::feature;
 ///
 /// assert_eq!(
 ///     feature!(if ("foo") {
@@ -50,7 +50,7 @@ macro_rules! expr_feature {
 /// # Examples
 ///
 /// ```rust
-/// use cfg_exif::expr::cfg;
+/// use cfg_elif::expr::cfg;
 ///
 /// assert_eq!(
 ///     cfg!(if (feature == "foo") {

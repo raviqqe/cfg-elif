@@ -1,8 +1,8 @@
-# cfg-exif
+# cfg-elif
 
-[![GitHub Action](https://img.shields.io/github/actions/workflow/status/raviqqe/cfg-exif/test.yaml?branch=main&style=flat-square)](https://github.com/raviqqe/cfg-exif/actions)
-[![Crate](https://img.shields.io/crates/v/cfg-exif.svg?style=flat-square)](https://crates.io/crates/cfg-exif)
-[![License](https://img.shields.io/github/license/raviqqe/cfg-exif.svg?style=flat-square)](UNLICENSE)
+[![GitHub Action](https://img.shields.io/github/actions/workflow/status/raviqqe/cfg-elif/test.yaml?branch=main&style=flat-square)](https://github.com/raviqqe/cfg-elif/actions)
+[![Crate](https://img.shields.io/crates/v/cfg-elif.svg?style=flat-square)](https://crates.io/crates/cfg-elif)
+[![License](https://img.shields.io/github/license/raviqqe/cfg-elif.svg?style=flat-square)](UNLICENSE)
 
 The `rustfmt`-friendly conditional compilation like [`cfg-if`](https://github.com/rust-lang/cfg-if).
 
@@ -14,7 +14,7 @@ The `rustfmt`-friendly conditional compilation like [`cfg-if`](https://github.co
 ## Examples
 
 ```rust
-use cfg_exif::{expr, item};
+use cfg_elif::{expr, item};
 
 item::cfg!(if (feature == "foo") {
     type Foo = usize;
