@@ -8,7 +8,7 @@ The `rustfmt`-friendly [`cfg-if`](https://github.com/rust-lang/cfg-if).
 
 ## Features
 
-- Conditional compilation in expression and item positions
+- Conditional compilation at both expression and item positions
 - `rustfmt` friendly
 
 ## License
