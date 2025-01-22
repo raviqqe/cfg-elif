@@ -1,3 +1,5 @@
+//! Conditional compilation at item positions.
+
 pub use crate::{item_cfg as cfg, item_feature as feature};
 
 /// Compiles expressions conditionally on features.
