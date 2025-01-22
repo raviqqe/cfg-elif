@@ -4,7 +4,7 @@
 [![Crate](https://img.shields.io/crates/v/cfg-exif.svg?style=flat-square)](https://crates.io/crates/cfg-exif)
 [![License](https://img.shields.io/github/license/raviqqe/cfg-exif.svg?style=flat-square)](UNLICENSE)
 
-The `rustfmt`-friendly [`cfg-if`](https://github.com/rust-lang/cfg-if).
+The `rustfmt`-friendly conditional compilation like [`cfg-if`](https://github.com/rust-lang/cfg-if).
 
 ## Features
 
