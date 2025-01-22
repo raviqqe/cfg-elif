@@ -21,13 +21,13 @@ macro_rules! item_feature {
         #[cfg(feature = $name)]
         $then1
         #[cfg(not(feature = $name))]
-        feature!($(if $condition { $then2 } else)* { $else })
+        $crate::item_feature!($(if $condition { $then2 } else)* { $else })
     };
     (if (!$name:literal) { $then1:item } else $(if $condition:tt { $then2:item } else)* { $else:item }) => {
         #[cfg(not(feature = $name))]
         $then1
         #[cfg(feature = $name)]
-        feature!($(if $condition { $then2 } else)* { $else })
+        $crate::item_feature!($(if $condition { $then2 } else)* { $else })
     };
     ({ $else:item }) => {{
         $else
@@ -55,13 +55,13 @@ macro_rules! item_cfg {
         #[cfg($key = $value)]
         $then1
         #[cfg(not($key = $value))]
-        cfg!($(if $condition { $then2 } else)* { $else })
+        $crate::item_cfg!($(if $condition { $then2 } else)* { $else })
     }};
     (if ($key:ident != $value:literal) { $then1:item } else $(if $condition:tt { $then2:item } else)* { $else:item }) => {{
         #[cfg(not($key = $value))]
         $then1
         #[cfg($key = $value)]
-        cfg!($(if $condition { $then2 } else)* { $else })
+        $crate::item_cfg!($(if $condition { $then2 } else)* { $else })
     }};
     ({ $else:item }) => {{
         $else

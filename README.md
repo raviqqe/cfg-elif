@@ -11,6 +11,31 @@ The `rustfmt`-friendly [`cfg-if`](https://github.com/rust-lang/cfg-if).
 - Conditional compilation at both expression and item positions
 - `rustfmt` friendly
 
+## Examples
+
+```rust
+use cfg_exif::{cfg, item};
+
+item::cfg!(if (feature == "foo") {
+    type Foo = usize;
+} else if (target_os == "linux") {
+    type Foo = isize;
+} else {
+    type Foo = f64;
+});
+
+assert_eq!(
+    cfg!(if (feature == "foo") {
+        0
+    } else if (target_os != "fuchsia") {
+        42
+    } else {
+        1
+    }),
+    42
+);
+```
+
 ## License
 
 [The Unlicense](UNLICENSE)
