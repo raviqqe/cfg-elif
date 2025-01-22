@@ -28,7 +28,7 @@ macro_rules! feature {
             #[cfg(feature = $name)]
             { $then1 }
             #[cfg(not(feature = $name))]
-            { $crate::feature!($(if $condition { $then2 } else)* { $else }) }
+            { feature!($(if $condition { $then2 } else)* { $else }) }
         }
     };
     (if (!$name:literal) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {
@@ -36,7 +36,7 @@ macro_rules! feature {
             #[cfg(not(feature = $name))]
             { $then1 }
             #[cfg(feature = $name)]
-            { $crate::feature!($(if $condition { $then2 } else)* { $else }) }
+            { feature!($(if $condition { $then2 } else)* { $else }) }
         }
     };
     ({ $else:expr }) => {{
@@ -73,7 +73,7 @@ macro_rules! cfg {
         }
         #[cfg(not($key = $value))]
         {
-            $crate::cfg!($(if $condition { $then2 } else)* { $else })
+            cfg!($(if $condition { $then2 } else)* { $else })
         }
     }};
     (if ($key:ident != $value:literal) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {{
@@ -83,7 +83,7 @@ macro_rules! cfg {
         }
         #[cfg($key = $value)]
         {
-            $crate::cfg!($(if $condition { $then2 } else)* { $else })
+            cfg!($(if $condition { $then2 } else)* { $else })
         }
     }};
     ({ $else:expr }) => {{
