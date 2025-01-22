@@ -62,6 +62,8 @@ macro_rules! feature {
 ///         2
 ///     } else if ((feature == "baz") || (target_os == "freebsd")) {
 ///         3
+///     } else if (!(panic == "unwind")) {
+///         4
 ///     } else {
 ///         42
 ///     }),
@@ -108,6 +110,13 @@ macro_rules! cfg {
             $then1
         } else {
             $crate::cfg!($(if $condition { $then2 } else)* { $else })
+        })
+    }};
+    (if (!$condition1:tt) { $then1:expr } else $(if $condition2:tt { $then2:expr } else)* { $else:expr }) => {{
+        $crate::cfg!(if $condition1 {
+            $crate::cfg!($(if $condition2 { $then2 } else)* { $else })
+        } else {
+            $then1
         })
     }};
     ({ $else:expr }) => {{

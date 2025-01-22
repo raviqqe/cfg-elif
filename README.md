@@ -33,6 +33,8 @@ assert_eq!(
         2
     } else if ((feature == "baz") || (target_os == "freebsd")) {
         3
+    } else if (!(panic == "unwind")) {
+        4
     } else {
         42
     }),
