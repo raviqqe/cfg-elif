@@ -43,27 +43,53 @@ macro_rules! item_feature {
 ///
 /// cfg!(if (feature == "foo") {
 ///     type Foo = usize;
-/// } else if (target_os == "linux") {
+/// } else if (target_pointer_width != "64") {
 ///     type Foo = isize;
+/// } else if ((target_family == "unix") && (feature == "bar")) {
+///     type Foo = i32;
+/// } else if ((feature == "baz") || (target_os == "freebsd")) {
+///     type Foo = i64;
 /// } else {
 ///     type Foo = f64;
 /// });
+///
+/// assert_eq!(3.14 as Foo, 3.14);
 /// ```
 #[macro_export]
 macro_rules! item_cfg {
-    (if ($key:ident == $value:literal) { $then1:item } else $(if $condition:tt { $then2:item } else)* { $else:item }) => {{
+    (if ($key:ident == $value:literal) { $then1:item } else $(if $condition:tt { $then2:item } else)* { $else:item }) => {
         #[cfg($key = $value)]
         $then1
         #[cfg(not($key = $value))]
-        $crate::item_cfg!($(if $condition { $then2 } else)* { $else })
-    }};
-    (if ($key:ident != $value:literal) { $then1:item } else $(if $condition:tt { $then2:item } else)* { $else:item }) => {{
+        $crate::item_cfg!($(if $condition { $then2 } else)* { $else });
+    };
+    (if ($key:ident != $value:literal) { $then1:item } else $(if $condition:tt { $then2:item } else)* { $else:item }) => {
         #[cfg(not($key = $value))]
         $then1
         #[cfg($key = $value)]
-        $crate::item_cfg!($(if $condition { $then2 } else)* { $else })
-    }};
-    ({ $else:item }) => {{
+        $crate::item_cfg!($(if $condition { $then2 } else)* { $else });
+    };
+    (if ($left:tt && $right:tt) { $then1:item } else $(if $condition:tt { $then2:item } else)* { $else:item }) => {
+        $crate::item_cfg!(if $left {
+            $crate::item_cfg!(if $right {
+                $then1
+            } else {
+                $crate::item_cfg!($(if $condition { $then2 } else)* { $else });
+            });
+        } else {
+            $crate::item_cfg!($(if $condition { $then2 } else)* { $else });
+        });
+    };
+    (if ($left:tt || $right:tt) { $then1:item } else $(if $condition:tt { $then2:item } else)* { $else:item }) => {
+        $crate::item_cfg!(if $left {
+            $then1
+        } else if $right {
+            $then1
+        } else {
+            $crate::item_cfg!($(if $condition { $then2 } else)* { $else });
+        });
+    };
+    ({ $else:item }) => {
         $else
-    }};
+    };
 }
