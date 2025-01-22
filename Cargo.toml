@@ -5,6 +5,11 @@ version = "0.3.1"
 edition = "2021"
 license-file = "./UNLICENSE"
 
+[features]
+foo = []
+bar = []
+baz = []
+
 [workspace.lints.rust]
 missing_docs = "deny"
 warnings = "deny"

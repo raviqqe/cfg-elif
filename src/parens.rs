@@ -1,7 +1,5 @@
-#![doc = include_str!("../README.md")]
-#![no_std]
-
-pub mod parens;
+pub use crate::parens_cfg as cfg;
+pub use crate::parens_feature as feature;
 
 /// Compiles expressions conditionally on features.
 ///
@@ -22,14 +20,12 @@ pub mod parens;
 /// );
 /// ```
 #[macro_export]
-macro_rules! feature {
+macro_rules! parens_feature {
     (if ($name:literal) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {
-        {
-            #[cfg(feature = $name)]
-            { $then1 }
-            #[cfg(not(feature = $name))]
-            { $crate::feature!($(if $condition { $then2 } else)* { $else }) }
-        }
+        #[cfg(feature = $name)]
+        ($then1)
+        #[cfg(not(feature = $name))]
+        (feature!($(if $condition { $then2 } else)* { $else }))
     };
     (if (!$name:literal) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {
         {
@@ -65,7 +61,7 @@ macro_rules! feature {
 /// );
 /// ```
 #[macro_export]
-macro_rules! cfg {
+macro_rules! parens_cfg {
     (if ($key:ident == $value:literal) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {{
         #[cfg($key = $value)]
         {
