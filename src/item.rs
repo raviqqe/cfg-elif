@@ -29,17 +29,13 @@ macro_rules! parens_feature {
         (feature!($(if $condition { $then2 } else)* { $else }))
     };
     (if (!$name:literal) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {
-        {
-            #[cfg(not(feature = $name))]
-            { $then1 }
-            #[cfg(feature = $name)]
-            { $crate::feature!($(if $condition { $then2 } else)* { $else }) }
-        }
+        #[cfg(not(feature = $name))]
+        ($then1)
+        #[cfg(feature = $name)]
+        ($crate::feature!($(if $condition { $then2 } else)* { $else }))
     };
     ({ $else:expr }) => {{
-        {
-            $else
-        }
+        $else
     }};
 }
 
