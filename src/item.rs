@@ -1,11 +1,11 @@
-pub use crate::{parens_cfg as cfg, parens_feature as feature};
+pub use crate::{item_cfg as cfg, item_feature as feature};
 
 /// Compiles expressions conditionally on features.
 ///
 /// # Examples
 ///
 /// ```rust
-/// use cfg_exif::parens::feature;
+/// use cfg_exif::item::feature;
 ///
 /// feature! {
 ///   if ("foo") {
@@ -16,7 +16,7 @@ pub use crate::{parens_cfg as cfg, parens_feature as feature};
 /// }
 /// ```
 #[macro_export]
-macro_rules! parens_feature {
+macro_rules! item_feature {
     (if ($name:literal) { $then1:item } else $(if $condition:tt { $then2:item } else)* { $else:item }) => {
         #[cfg(feature = $name)]
         $then1
@@ -29,7 +29,7 @@ macro_rules! parens_feature {
         #[cfg(feature = $name)]
         $crate::feature!($(if $condition { $then2 } else)* { $else })
     };
-    ({ $else:expr }) => {{
+    ({ $else:item }) => {{
         $else
     }};
 }
@@ -53,7 +53,7 @@ macro_rules! parens_feature {
 /// );
 /// ```
 #[macro_export]
-macro_rules! parens_cfg {
+macro_rules! item_cfg {
     (if ($key:ident == $value:literal) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {{
         #[cfg($key = $value)]
         {
