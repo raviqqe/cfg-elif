@@ -56,14 +56,14 @@ macro_rules! feature {
 /// assert_eq!(
 ///     cfg!(if (feature == "foo") {
 ///         0
-///     } else if (target_os != "fuchsia") {
-///         42
-///     } else if ((feature == "bar") && (target_os == "linux")) {
-///         42
-///     } else if ((feature == "baz") || (target_os == "macos")) {
-///         42
-///     } else {
+///     } else if (target_pointer_width != "64") {
 ///         1
+///     } else if ((target_family == "unix") && (feature == "bar")) {
+///         2
+///     } else if ((feature == "baz") || (target_os == "freebsd")) {
+///         3
+///     } else {
+///         42
 ///     }),
 ///     42
 /// );
