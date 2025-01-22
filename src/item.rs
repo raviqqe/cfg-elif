@@ -7,13 +7,11 @@ pub use crate::{item_cfg as cfg, item_feature as feature};
 /// ```rust
 /// use cfg_exif::item::feature;
 ///
-/// feature! {
-///   if ("foo") {
-/// type Foo =  usize;
+/// feature!(if ("foo") {
+///     type Foo = usize;
 /// } else {
-/// type Foo = f64;
-/// }
-/// }
+///     type Foo = f64;
+/// });
 /// ```
 #[macro_export]
 macro_rules! item_feature {
