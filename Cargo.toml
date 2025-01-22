@@ -1,10 +1,10 @@
 [package]
-name = "cfg-exif"
+name = "cfg-elif"
 description = "Conditional compilation in expressions"
 version = "0.6.0"
 edition = "2021"
 license-file = "./UNLICENSE"
-repository = "https://github.com/raviqqe/cfg-exif"
+repository = "https://github.com/raviqqe/cfg-elif"
 
 [features]
 foo = []

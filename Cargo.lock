@@ -3,5 +3,5 @@
 version = 4
 
 [[package]]
-name = "cfg-exif"
+name = "cfg-elif"
 version = "0.6.0"

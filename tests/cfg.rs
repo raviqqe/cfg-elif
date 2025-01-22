@@ -1,4 +1,4 @@
-use cfg_exif::expr::cfg;
+use cfg_elif::expr::cfg;
 
 #[test]
 fn feature() {

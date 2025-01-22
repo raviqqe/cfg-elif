@@ -7,7 +7,7 @@ pub use crate::{item_cfg as cfg, item_feature as feature};
 /// # Examples
 ///
 /// ```rust
-/// use cfg_exif::item::feature;
+/// use cfg_elif::item::feature;
 ///
 /// feature!(if ("foo") {
 ///     type Foo = usize;
@@ -41,7 +41,7 @@ macro_rules! item_feature {
 /// # Examples
 ///
 /// ```rust
-/// use cfg_exif::item::cfg;
+/// use cfg_elif::item::cfg;
 ///
 /// cfg!(if (feature == "foo") {
 ///     type Foo = usize;
