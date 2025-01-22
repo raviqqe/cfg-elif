@@ -6,7 +6,9 @@ pub use crate::parens_feature as feature;
 /// # Examples
 ///
 /// ```rust
-/// use cfg_exif::feature;
+/// use cfg_exif::parens::feature;
+///
+/// type Foo = feature!(if ("foo") { usize } else { f64 });
 ///
 /// assert_eq!(
 ///     feature!(if ("foo") {
