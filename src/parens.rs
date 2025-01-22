@@ -1,5 +1,4 @@
-pub use crate::parens_cfg as cfg;
-pub use crate::parens_feature as feature;
+pub use crate::{parens_cfg as cfg, parens_feature as feature};
 
 /// Compiles expressions conditionally on features.
 ///
