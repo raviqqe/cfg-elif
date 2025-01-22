@@ -1,7 +1,7 @@
 #![doc = include_str!("../README.md")]
 #![no_std]
 
-pub mod parens;
+pub mod item;
 
 /// Compiles expressions conditionally on features.
 ///

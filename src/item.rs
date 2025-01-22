@@ -7,32 +7,27 @@ pub use crate::{parens_cfg as cfg, parens_feature as feature};
 /// ```rust
 /// use cfg_exif::parens::feature;
 ///
-/// type Foo = feature!(if ("foo") { usize } else { f64 });
-///
-/// assert_eq!(
-///     feature!(if ("foo") {
-///         0
-///     } else if (!"bar") {
-///         42
-///     } else {
-///         1
-///     }),
-///     42
-/// );
+/// feature! {
+///   if ("foo") {
+/// type Foo =  usize;
+/// } else {
+/// type Foo = f64;
+/// }
+/// }
 /// ```
 #[macro_export]
 macro_rules! parens_feature {
-    (if ($name:literal) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {
+    (if ($name:literal) { $then1:item } else $(if $condition:tt { $then2:item } else)* { $else:item }) => {
         #[cfg(feature = $name)]
-        ($then1)
+        $then1
         #[cfg(not(feature = $name))]
-        (feature!($(if $condition { $then2 } else)* { $else }))
+        feature!($(if $condition { $then2 } else)* { $else })
     };
-    (if (!$name:literal) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {
+    (if (!$name:literal) { $then1:item } else $(if $condition:tt { $then2:item } else)* { $else:item }) => {
         #[cfg(not(feature = $name))]
-        ($then1)
+        $then1
         #[cfg(feature = $name)]
-        ($crate::feature!($(if $condition { $then2 } else)* { $else }))
+        $crate::feature!($(if $condition { $then2 } else)* { $else })
     };
     ({ $else:expr }) => {{
         $else
