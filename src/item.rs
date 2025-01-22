@@ -39,18 +39,15 @@ macro_rules! item_feature {
 /// # Examples
 ///
 /// ```rust
-/// use cfg_exif::cfg;
+/// use cfg_exif::item::cfg;
 ///
-/// assert_eq!(
-///     cfg!(if (feature == "foo") {
-///         0
-///     } else if (target_os != "fuchsia") {
-///         42
-///     } else {
-///         1
-///     }),
-///     42
-/// );
+/// cfg!(if (feature == "foo") {
+///     type Foo = usize;
+/// } else if (target_os == "linux") {
+///     type Foo = isize;
+/// } else {
+///     type Foo = f64;
+/// });
 /// ```
 #[macro_export]
 macro_rules! item_cfg {
