@@ -9,6 +9,8 @@ pub use crate::{item_cfg as cfg, item_feature as feature};
 ///
 /// feature!(if ("foo") {
 ///     type Foo = usize;
+/// } else if ("bar") {
+///     type Foo = isize;
 /// } else {
 ///     type Foo = f64;
 /// });
@@ -25,7 +27,7 @@ macro_rules! item_feature {
         #[cfg(not(feature = $name))]
         $then1
         #[cfg(feature = $name)]
-        $crate::feature!($(if $condition { $then2 } else)* { $else })
+        feature!($(if $condition { $then2 } else)* { $else })
     };
     ({ $else:item }) => {{
         $else
@@ -52,29 +54,19 @@ macro_rules! item_feature {
 /// ```
 #[macro_export]
 macro_rules! item_cfg {
-    (if ($key:ident == $value:literal) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {{
+    (if ($key:ident == $value:literal) { $then1:item } else $(if $condition:tt { $then2:item } else)* { $else:item }) => {{
         #[cfg($key = $value)]
-        {
-            $then1
-        }
+        $then1
         #[cfg(not($key = $value))]
-        {
-            $crate::cfg!($(if $condition { $then2 } else)* { $else })
-        }
+        cfg!($(if $condition { $then2 } else)* { $else })
     }};
-    (if ($key:ident != $value:literal) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {{
+    (if ($key:ident != $value:literal) { $then1:item } else $(if $condition:tt { $then2:item } else)* { $else:item }) => {{
         #[cfg(not($key = $value))]
-        {
-            $then1
-        }
+        $then1
         #[cfg($key = $value)]
-        {
-            $crate::cfg!($(if $condition { $then2 } else)* { $else })
-        }
+        cfg!($(if $condition { $then2 } else)* { $else })
     }};
-    ({ $else:expr }) => {{
-        {
-            $else
-        }
+    ({ $else:item }) => {{
+        $else
     }};
 }
