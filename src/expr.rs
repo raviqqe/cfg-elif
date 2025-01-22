@@ -21,7 +21,7 @@ pub use crate::{expr_cfg as cfg, expr_feature as feature};
 /// );
 /// ```
 #[macro_export]
-macro_rules! feature {
+macro_rules! expr_feature {
     (if ($name:literal) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {
         {
             #[cfg(feature = $name)]
@@ -70,7 +70,7 @@ macro_rules! feature {
 /// );
 /// ```
 #[macro_export]
-macro_rules! cfg {
+macro_rules! expr_cfg {
     (if ($key:ident == $value:literal) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {{
         #[cfg($key = $value)]
         {
