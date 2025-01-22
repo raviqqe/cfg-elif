@@ -58,6 +58,8 @@ macro_rules! feature {
 ///         0
 ///     } else if (target_os != "fuchsia") {
 ///         42
+///     } else if ((feature == "bar") && (target_os == "linux")) {
+///         42
 ///     } else {
 ///         1
 ///     }),
@@ -85,6 +87,17 @@ macro_rules! cfg {
         {
             $crate::cfg!($(if $condition { $then2 } else)* { $else })
         }
+    }};
+    (if ($left:tt && $right:tt) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {{
+        $crate::cfg!(if $left {
+            $crate::cfg!(if $right {
+                $then1
+            } else {
+                $crate::cfg!($(if $condition { $then2 } else)* { $else })
+            })
+        } else {
+            $crate::cfg!($(if $condition { $then2 } else)* { $else })
+        })
     }};
     ({ $else:expr }) => {{
         {
