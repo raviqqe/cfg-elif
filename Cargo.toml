@@ -4,6 +4,7 @@ description = "Conditional compilation in expressions"
 version = "0.5.0"
 edition = "2021"
 license-file = "./UNLICENSE"
+repository = "https://github.com/raviqqe/cfg-exif"
 
 [features]
 foo = []
