@@ -11,11 +11,19 @@ pub use crate::{item_cfg as cfg, item_feature as feature};
 ///
 /// feature!(if ("foo") {
 ///     type Foo = usize;
-/// } else if ("bar") {
+/// } else if ("bar" && "baz") {
 ///     type Foo = isize;
-/// } else {
+/// } else if ("bar" || "baz") {
+///     type Foo = i8;
+/// } else if (("bar" || "baz") && ("foo" || "baz")) {
+///     type Foo = i32;
+/// } else if (!"bar") {
 ///     type Foo = f64;
+/// } else {
+///     type Foo = ();
 /// });
+///
+/// assert_eq!(3.14 as Foo, 3.14);
 /// ```
 #[macro_export]
 macro_rules! item_feature {
@@ -23,17 +31,44 @@ macro_rules! item_feature {
         #[cfg(feature = $name)]
         $then1
         #[cfg(not(feature = $name))]
-        $crate::item_feature!($(if $condition { $then2 } else)* { $else })
+        $crate::item_feature!($(if $condition { $then2 } else)* { $else });
     };
     (if (!$name:literal) { $then1:item } else $(if $condition:tt { $then2:item } else)* { $else:item }) => {
         #[cfg(not(feature = $name))]
         $then1
         #[cfg(feature = $name)]
-        $crate::item_feature!($(if $condition { $then2 } else)* { $else })
+        $crate::item_feature!($(if $condition { $then2 } else)* { $else });
     };
-    ({ $else:item }) => {{
+    (if ($left:tt && $right:tt) { $then1:item } else $(if $condition:tt { $then2:item } else)* { $else:item }) => {
+        $crate::item_feature!(if ($left) {
+            $crate::item_feature!(if ($right) {
+                $then1
+            } else {
+                $crate::item_feature!($(if $condition { $then2 } else)* { $else });
+            });
+        } else {
+            $crate::item_feature!($(if $condition { $then2 } else)* { $else });
+        });
+    };
+    (if ($left:tt || $right:tt) { $then1:item } else $(if $condition:tt { $then2:item } else)* { $else:item }) => {
+        $crate::item_feature!(if ($left) {
+            $then1
+        } else if ($right) {
+            $then1
+        } else {
+            $crate::item_feature!($(if $condition { $then2 } else)* { $else });
+        });
+    };
+    (if ($inner:tt) { $then1:item } else $(if $condition:tt { $then2:item } else)* { $else:item }) => {
+        $crate::item_feature!(if $inner {
+            $then1
+        } else {
+            $crate::item_feature!($(if $condition { $then2 } else)* { $else });
+        });
+    };
+    ({ $else:item }) => {
         $else
-    }};
+    };
 }
 
 /// Compiles expressions conditionally on compile configurations.

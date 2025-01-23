@@ -12,10 +12,16 @@ pub use crate::{expr_cfg as cfg, expr_feature as feature};
 /// assert_eq!(
 ///     feature!(if ("foo") {
 ///         0
+///     } else if ("bar" && "baz") {
+///         1
+///     } else if ("bar" || "baz") {
+///         2
+///     } else if (("bar" || "baz") && ("foo" || "baz")) {
+///         3
 ///     } else if (!"bar") {
 ///         42
 ///     } else {
-///         1
+///         4
 ///     }),
 ///     42
 /// );
@@ -37,6 +43,33 @@ macro_rules! expr_feature {
             #[cfg(feature = $name)]
             { $crate::expr_feature!($(if $condition { $then2 } else)* { $else }) }
         }
+    };
+    (if ($left:tt && $right:tt) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {
+        $crate::expr_feature!(if ($left) {
+            $crate::expr_feature!(if ($right) {
+                $then1
+            } else {
+                $crate::expr_feature!($(if $condition { $then2 } else)* { $else })
+            })
+        } else {
+            $crate::expr_feature!($(if $condition { $then2 } else)* { $else })
+        })
+    };
+    (if ($left:tt || $right:tt) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {
+        $crate::expr_feature!(if ($left) {
+            $then1
+        } else if ($right) {
+            $then1
+        } else {
+            $crate::expr_feature!($(if $condition { $then2 } else)* { $else })
+        })
+    };
+    (if ($inner:tt) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {
+        $crate::expr_feature!(if $inner {
+            $then1
+        } else {
+            $crate::expr_feature!($(if $condition { $then2 } else)* { $else })
+        })
     };
     ({ $else:expr }) => {{
         {
