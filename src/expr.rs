@@ -42,6 +42,26 @@ macro_rules! expr_feature {
             { $crate::expr_feature!($(if $condition { $then2 } else)* { $else }) }
         }
     };
+    (if ($left:tt && $right:tt) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {
+        $crate::expr_feature!(if ($left) {
+            $crate::expr_feature!(if ($right) {
+                $then1
+            } else {
+                $crate::expr_feature!($(if $condition { $then2 } else)* { $else })
+            })
+        } else {
+            $crate::expr_feature!($(if $condition { $then2 } else)* { $else })
+        })
+    };
+    (if ($left:tt || $right:tt) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {
+        $crate::expr_feature!(if ($left) {
+            $then1
+        } else if ($right) {
+            $then1
+        } else {
+            $crate::expr_feature!($(if $condition { $then2 } else)* { $else })
+        })
+    };
     ({ $else:expr }) => {{
         {
             $else
