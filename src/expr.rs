@@ -64,7 +64,7 @@ macro_rules! expr_feature {
             $crate::expr_feature!($(if $condition { $then2 } else)* { $else })
         })
     };
-    (if (($inner:tt)) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {
+    (if ($inner:tt) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {
         $crate::expr_feature!(if $inner {
             $then1
         } else {
