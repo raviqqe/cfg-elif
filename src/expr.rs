@@ -12,10 +12,14 @@ pub use crate::{expr_cfg as cfg, expr_feature as feature};
 /// assert_eq!(
 ///     feature!(if ("foo") {
 ///         0
+///     } else if ("bar" && "baz") {
+///         1
+///     } else if ("bar" || "baz") {
+///         2
 ///     } else if (!"bar") {
 ///         42
 ///     } else {
-///         1
+///         3
 ///     }),
 ///     42
 /// );

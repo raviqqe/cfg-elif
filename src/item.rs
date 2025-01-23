@@ -31,9 +31,9 @@ macro_rules! item_feature {
         #[cfg(feature = $name)]
         $crate::item_feature!($(if $condition { $then2 } else)* { $else })
     };
-    ({ $else:item }) => {{
+    ({ $else:item }) => {
         $else
-    }};
+    };
 }
 
 /// Compiles expressions conditionally on compile configurations.
