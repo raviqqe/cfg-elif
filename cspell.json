@@ -1,1 +1,3 @@
-{ "words": ["elif", "isize", "rustfmt", "usize"] }
+{
+  "words": ["docsrs", "elif", "isize", "rustfmt", "usize"]
+}
