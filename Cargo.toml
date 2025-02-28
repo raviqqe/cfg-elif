@@ -2,7 +2,7 @@
 name = "cfg-elif"
 description = "Conditional compilation in expressions"
 version = "0.6.2"
-edition = "2021"
+edition = "2024"
 license-file = "./UNLICENSE"
 repository = "https://github.com/raviqqe/cfg-elif"
 
