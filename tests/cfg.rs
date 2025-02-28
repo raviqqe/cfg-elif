@@ -1,6 +1,11 @@
 use cfg_elif::expr::cfg;
 
 #[test]
+fn no_value() {
+    assert_eq!(cfg!(if (docsrs) { 0 } else { 42 }), 42);
+}
+
+#[test]
 fn feature() {
     assert_eq!(cfg!(if (feature == "foo") { 0 } else { 42 }), 42);
     assert_eq!(

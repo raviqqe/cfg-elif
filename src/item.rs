@@ -96,6 +96,12 @@ macro_rules! item_feature {
 /// ```
 #[macro_export]
 macro_rules! item_cfg {
+    (if ($key:ident) { $then1:item } else $(if $condition:tt { $then2:item } else)* { $else:item }) => {
+        #[cfg($key)]
+        $then1
+        #[cfg(not($key))]
+        $crate::item_cfg!($(if $condition { $then2 } else)* { $else });
+    };
     (if ($key:ident == $value:literal) { $then1:item } else $(if $condition:tt { $then2:item } else)* { $else:item }) => {
         #[cfg($key = $value)]
         $then1

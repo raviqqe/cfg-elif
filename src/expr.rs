@@ -104,6 +104,16 @@ macro_rules! expr_feature {
 /// ```
 #[macro_export]
 macro_rules! expr_cfg {
+    (if ($key:ident) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {{
+        #[cfg($key)]
+        {
+            $then1
+        }
+        #[cfg(not($key))]
+        {
+            $crate::expr_cfg!($(if $condition { $then2 } else)* { $else })
+        }
+    }};
     (if ($key:ident == $value:literal) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {{
         #[cfg($key = $value)]
         {
