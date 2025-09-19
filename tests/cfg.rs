@@ -1,3 +1,5 @@
+//! Configuration tests.
+
 use cfg_elif::expr::cfg;
 
 #[test]
