@@ -1,3 +1,5 @@
+//! Feature tests.
+
 use cfg_elif::expr::feature;
 
 #[test]
