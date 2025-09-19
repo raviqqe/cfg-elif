@@ -1,16 +1,16 @@
 [package]
 name = "cfg-elif"
-description = "Formatter-friendly conditional compilation at item and expression positions"
-version = "0.6.3"
+version = "0.6.4"
 edition = "2024"
-license-file = "./UNLICENSE"
+description = "Formatter-friendly conditional compilation at item and expression positions"
 repository = "https://github.com/raviqqe/cfg-elif"
+license-file = "./UNLICENSE"
 
 [features]
-foo = []
 bar = []
 baz = []
+foo = []
 
-[workspace.lints.rust]
+[lints.rust]
 missing_docs = "deny"
 warnings = "deny"
