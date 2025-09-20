@@ -1,6 +1,6 @@
 [package]
 name = "cfg-elif"
-version = "0.6.4"
+version = "0.6.5"
 edition = "2024"
 description = "Formatter-friendly conditional compilation at item and expression positions"
 repository = "https://github.com/raviqqe/cfg-elif"
