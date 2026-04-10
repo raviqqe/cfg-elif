@@ -28,54 +28,44 @@ pub use crate::{expr_cfg as cfg, expr_feature as feature};
 /// ```
 #[macro_export]
 macro_rules! expr_feature {
-    (if ($name:literal) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {
+    (if ($name:literal) $then1:block else $(if $condition:tt $then2:block else)* $else:block) => {
         {
             #[cfg(feature = $name)]
-            { $then1 }
+            $then1
             #[cfg(not(feature = $name))]
-            { $crate::expr_feature!($(if $condition { $then2 } else)* { $else }) }
+            { $crate::expr_feature!($(if $condition $then2 else)* $else) }
         }
     };
-    (if (!$name:literal) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {
+    (if (!$name:literal) $then1:block else $(if $condition:tt $then2:block else)* $else:block) => {
         {
             #[cfg(not(feature = $name))]
-            { $then1 }
+            $then1
             #[cfg(feature = $name)]
-            { $crate::expr_feature!($(if $condition { $then2 } else)* { $else }) }
+            { $crate::expr_feature!($(if $condition $then2 else)* $else) }
         }
     };
-    (if ($left:tt && $right:tt) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {
+    (if ($left:tt && $right:tt) $then1:block else $(if $condition:tt $then2:block else)* $else:block) => {
         $crate::expr_feature!(if ($left) {
-            $crate::expr_feature!(if ($right) {
-                $then1
-            } else {
-                $crate::expr_feature!($(if $condition { $then2 } else)* { $else })
+            $crate::expr_feature!(if ($right) $then1 else {
+                $crate::expr_feature!($(if $condition $then2 else)* $else)
             })
         } else {
-            $crate::expr_feature!($(if $condition { $then2 } else)* { $else })
+            $crate::expr_feature!($(if $condition $then2 else)* $else)
         })
     };
-    (if ($left:tt || $right:tt) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {
-        $crate::expr_feature!(if ($left) {
-            $then1
-        } else if ($right) {
-            $then1
-        } else {
-            $crate::expr_feature!($(if $condition { $then2 } else)* { $else })
+    (if ($left:tt || $right:tt) $then1:block else $(if $condition:tt $then2:block else)* $else:block) => {
+        $crate::expr_feature!(if ($left) $then1 else if ($right) $then1 else {
+            $crate::expr_feature!($(if $condition $then2 else)* $else)
         })
     };
-    (if ($inner:tt) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {
-        $crate::expr_feature!(if $inner {
-            $then1
-        } else {
-            $crate::expr_feature!($(if $condition { $then2 } else)* { $else })
+    (if ($inner:tt) $then1:block else $(if $condition:tt $then2:block else)* $else:block) => {
+        $crate::expr_feature!(if $inner $then1 else {
+            $crate::expr_feature!($(if $condition $then2 else)* $else)
         })
     };
-    ({ $else:expr }) => {{
-        {
-            $else
-        }
-    }};
+    ($else:block) => {
+        $else
+    };
 }
 
 /// Compiles expressions conditionally on compile configurations.
@@ -104,66 +94,44 @@ macro_rules! expr_feature {
 /// ```
 #[macro_export]
 macro_rules! expr_cfg {
-    (if ($key:ident) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {{
+    (if ($key:ident) $then1:block else $(if $condition:tt $then2:block else)* $else:block) => {{
         #[cfg($key)]
-        {
-            $then1
-        }
+        $then1
         #[cfg(not($key))]
-        {
-            $crate::expr_cfg!($(if $condition { $then2 } else)* { $else })
-        }
+        { $crate::expr_cfg!($(if $condition $then2 else)* $else) }
     }};
-    (if ($key:ident == $value:literal) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {{
+    (if ($key:ident == $value:literal) $then1:block else $(if $condition:tt $then2:block else)* $else:block) => {{
         #[cfg($key = $value)]
-        {
-            $then1
-        }
+        $then1
         #[cfg(not($key = $value))]
-        {
-            $crate::expr_cfg!($(if $condition { $then2 } else)* { $else })
-        }
+        { $crate::expr_cfg!($(if $condition $then2 else)* $else) }
     }};
-    (if ($key:ident != $value:literal) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {{
+    (if ($key:ident != $value:literal) $then1:block else $(if $condition:tt $then2:block else)* $else:block) => {{
         #[cfg(not($key = $value))]
-        {
-            $then1
-        }
+        $then1
         #[cfg($key = $value)]
-        {
-            $crate::expr_cfg!($(if $condition { $then2 } else)* { $else })
-        }
+        { $crate::expr_cfg!($(if $condition $then2 else)* $else) }
     }};
-    (if ($left:tt && $right:tt) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {{
+    (if ($left:tt && $right:tt) $then1:block else $(if $condition:tt $then2:block else)* $else:block) => {{
         $crate::expr_cfg!(if $left {
-            $crate::expr_cfg!(if $right {
-                $then1
-            } else {
-                $crate::expr_cfg!($(if $condition { $then2 } else)* { $else })
+            $crate::expr_cfg!(if $right $then1 else {
+                $crate::expr_cfg!($(if $condition $then2 else)* $else)
             })
         } else {
-            $crate::expr_cfg!($(if $condition { $then2 } else)* { $else })
+            $crate::expr_cfg!($(if $condition $then2 else)* $else)
         })
     }};
-    (if ($left:tt || $right:tt) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {{
-        $crate::expr_cfg!(if $left {
-            $then1
-        } else if $right {
-            $then1
-        } else {
-            $crate::expr_cfg!($(if $condition { $then2 } else)* { $else })
+    (if ($left:tt || $right:tt) $then1:block else $(if $condition:tt $then2:block else)* $else:block) => {{
+        $crate::expr_cfg!(if $left $then1 else if $right $then1 else {
+            $crate::expr_cfg!($(if $condition $then2 else)* $else)
         })
     }};
-    (if (!$condition1:tt) { $then1:expr } else $(if $condition2:tt { $then2:expr } else)* { $else:expr }) => {{
+    (if (!$condition1:tt) $then1:block else $(if $condition2:tt $then2:block else)* $else:block) => {{
         $crate::expr_cfg!(if $condition1 {
-            $crate::expr_cfg!($(if $condition2 { $then2 } else)* { $else })
-        } else {
-            $then1
-        })
+            $crate::expr_cfg!($(if $condition2 $then2 else)* $else)
+        } else $then1)
     }};
-    ({ $else:expr }) => {{
-        {
-            $else
-        }
-    }};
+    ($else:block) => {
+        $else
+    };
 }
